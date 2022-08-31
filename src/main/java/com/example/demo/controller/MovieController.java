@@ -1,0 +1,51 @@
+package com.example.demo.controller;
+
+import com.example.demo.Hello;
+import com.example.demo.entity.Movie;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
+
+@RestController
+public class MovieController {
+
+    private final AtomicLong counter = new AtomicLong();
+
+    private List<Movie> movies = new ArrayList();
+
+    @GetMapping("/movies")
+    List<Movie> list(@RequestParam(required = false) String q) {
+
+        if(q != null) {
+
+            //search movies by name
+            
+            return movies.subList(0, 2);
+        }
+
+        return movies;
+    }
+
+    @GetMapping("/movies/init")
+    List<Movie> init() {
+        Movie movie1 = new Movie(counter.incrementAndGet(), "titanic", "t12312", 1998, 120);
+        Movie movie2 = new Movie(counter.incrementAndGet(), "matrix", "t12313", 2001, 107);
+        Movie movie3 = new Movie(counter.incrementAndGet(), "lord of the rings", "t12314", 2003, 160);
+        Movie movie4 = new Movie(counter.incrementAndGet(), "harry potter", "t12315", 2005, 110);
+        Movie movie5 = new Movie(counter.incrementAndGet(), "iron man", "t12316", 2004, 108);
+
+        movies.add(movie1);
+        movies.add(movie2);
+        movies.add(movie3);
+        movies.add(movie4);
+        movies.add(movie5);
+
+
+        return movies;
+    }
+
+}
