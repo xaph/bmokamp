@@ -2,9 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.Hello;
 import com.example.demo.entity.Movie;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +21,20 @@ public class MovieController {
         if(q != null) {
 
             //search movies by name
-            
+
             return movies.subList(0, 2);
         }
 
         return movies;
+    }
+
+    @PostMapping("/movies")
+    Movie create(@RequestBody Movie movie) {
+
+        //store movie
+        movies.add(movie);
+
+        return movie;
     }
 
     @GetMapping("/movies/init")
