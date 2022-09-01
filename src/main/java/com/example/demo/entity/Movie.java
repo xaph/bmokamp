@@ -1,20 +1,18 @@
 package com.example.demo.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Movie {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String name;
 
     private String imdbKey;
 
+    @Column(name = "movie_year")
     private int year;
 
     private int duration;
@@ -22,19 +20,12 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(Long id, String name, String imdbKey, int year, int duration) {
-        this.id = id;
-        this.name = name;
-        this.imdbKey = imdbKey;
-        this.year = year;
-        this.duration = duration;
-    }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
