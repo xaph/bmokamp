@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:h2:file:./bmokamp
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
