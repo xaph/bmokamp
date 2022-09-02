@@ -38,13 +38,13 @@ public class MovieController {
     }
 
     @PostMapping("/movies")
-    Movie create(@RequestBody Movie movie) {
+    ResponseEntity<Movie> create(@RequestBody Movie movie) {
 
         //store movie
 //        movies.add(movie);
         movieRepository.save(movie);
 
-        return movie;
+        return ResponseEntity.status(HttpStatus.CREATED).body(movie);
     }
 
     @GetMapping("/movies/{id}")

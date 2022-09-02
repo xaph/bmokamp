@@ -1,8 +1,15 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
+@Getter
+@Setter
 public class Movie {
 
     @Id
@@ -17,47 +24,12 @@ public class Movie {
 
     private int duration;
 
-    public Movie() {
-    }
+    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "genre_id")
+    private Genre genre;
 
+    @OneToMany
+    private Set<Actor> cast;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getImdbKey() {
-        return imdbKey;
-    }
-
-    public void setImdbKey(String imdbKey) {
-        this.imdbKey = imdbKey;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
 }
