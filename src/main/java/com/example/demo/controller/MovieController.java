@@ -1,13 +1,14 @@
 package com.example.demo.controller;
 
-import com.example.demo.Hello;
 import com.example.demo.entity.Movie;
 import com.example.demo.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
@@ -46,22 +47,26 @@ public class MovieController {
         return movie;
     }
 
-//    @GetMapping("/movies/init")
-//    List<Movie> init() {
-//        Movie movie1 = new Movie(counter.incrementAndGet(), "titanic", "t12312", 1998, 120);
-//        Movie movie2 = new Movie(counter.incrementAndGet(), "matrix", "t12313", 2001, 107);
-//        Movie movie3 = new Movie(counter.incrementAndGet(), "lord of the rings", "t12314", 2003, 160);
-//        Movie movie4 = new Movie(counter.incrementAndGet(), "harry potter", "t12315", 2005, 110);
-//        Movie movie5 = new Movie(counter.incrementAndGet(), "iron man", "t12316", 2004, 108);
-//
-//        movies.add(movie1);
-//        movies.add(movie2);
-//        movies.add(movie3);
-//        movies.add(movie4);
-//        movies.add(movie5);
-//
-//
-//        return movies;
-//    }
+    @GetMapping("/movies/{id}")
+    ResponseEntity<Movie> getMovie(@PathVariable Long id) {
+
+        Optional<Movie> optionalMovie = movieRepository.findById(id);
+
+        if (optionalMovie.isPresent()) {
+            return ResponseEntity.ok(optionalMovie.get());
+        } else {
+
+            return ResponseEntity.notFound().build();
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+
+//    GET /movies/1
+//    POST /movies
+//    PUT /movies/1
+//    PATCH /movies/1
+//    DELETE /movies/1
+
 
 }
