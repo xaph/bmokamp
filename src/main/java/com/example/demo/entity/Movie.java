@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -15,6 +17,8 @@ public class Movie {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank(message = "name should not be blank!!!")
     private String name;
 
     private String imdbKey;
@@ -29,7 +33,7 @@ public class Movie {
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
-    @OneToMany
-    private Set<Actor> cast;
+    @OneToMany//(fetch = FetchType.EAGER)
+    private Set<Actor> cast = new HashSet<>();
 
 }

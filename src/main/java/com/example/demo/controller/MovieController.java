@@ -1,65 +1,67 @@
 package com.example.demo.controller;
 
+import com.example.demo.MovieService;
+import com.example.demo.entity.Actor;
 import com.example.demo.entity.Movie;
-import com.example.demo.repository.MovieRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
+@RequiredArgsConstructor
 public class MovieController {
 
-    private final AtomicLong counter = new AtomicLong();
-
-    @Autowired
-    private final MovieRepository movieRepository;
-
-    public MovieController(MovieRepository movieRepository) {
-        this.movieRepository = movieRepository;
-    }
+    private final MovieService movieService;
 
     @GetMapping("/movies")
-    List<Movie> list(@RequestParam(required = false) String q) {
-
-        if(q != null) {
-
-            //search movies by name
-
-//            return movies.subList(0, 2);
-            return null;
-        }
-
-        return (List<Movie>) movieRepository.findAll();
+    Iterable<Movie> list() {
+        return movieService.list();
     }
 
     @PostMapping("/movies")
-    ResponseEntity<Movie> create(@RequestBody Movie movie) {
+    ResponseEntity<Movie> create(@RequestBody @Valid Movie movie) {
 
-        //store movie
-//        movies.add(movie);
-        movieRepository.save(movie);
-
+        movieService.create(movie);
         return ResponseEntity.status(HttpStatus.CREATED).body(movie);
+    }
+
+    @PutMapping("/movies/{id}")
+    ResponseEntity<Movie> update(@PathVariable Long id, @RequestBody Movie movie) {
+
+        movie.setId(id);
+        return ResponseEntity.status(HttpStatus.CREATED).body(movieService.update(movie));
+    }
+
+    @PatchMapping("/movies/{id}/cast")
+    ResponseEntity<Movie> addCast(@RequestBody @Valid AddCastRequest addCastRequest) {
+
+        //if (addCastRequest.movieId == null || addCastRequest.actorId == null) {
+        //    return ResponseEntity.badRequest().body("should not be null");
+        //}
+
+        return ResponseEntity.status(HttpStatus.OK).body(movieService.addCast(addCastRequest.movieId(), addCastRequest.actorId()));
     }
 
     @GetMapping("/movies/{id}")
     ResponseEntity<Movie> getMovie(@PathVariable Long id) {
 
-        Optional<Movie> optionalMovie = movieRepository.findById(id);
+        Optional<Movie> optionalMovie = movieService.get(id);
 
         if (optionalMovie.isPresent()) {
             return ResponseEntity.ok(optionalMovie.get());
         } else {
 
             return ResponseEntity.notFound().build();
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+    record AddCastRequest(@NotNull Long movieId, @NotNull(message = "actor id should not be null") Long actorId) {}
 
 
 //    GET /movies/1
@@ -67,6 +69,5 @@ public class MovieController {
 //    PUT /movies/1
 //    PATCH /movies/1
 //    DELETE /movies/1
-
 
 }
