@@ -6,6 +6,8 @@ import com.example.demo.entity.Movie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,7 +27,11 @@ public class MovieController {
     }
 
     @PostMapping("/movies")
-    ResponseEntity<Movie> create(@RequestBody @Valid Movie movie) {
+    ResponseEntity<Movie> create(@RequestBody @Valid @Validated Movie movie, @AuthenticationPrincipal Object principle) {
+
+        //if (movie.getName() == null || movie.getName().isEmpty()) {
+        //    return ResponseEntity.badRequest().body("...");
+        //}
 
         movieService.create(movie);
         return ResponseEntity.status(HttpStatus.CREATED).body(movie);
